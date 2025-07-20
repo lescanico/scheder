@@ -8,8 +8,7 @@ import {
   Alert,
   Container,
   Avatar,
-  Grid,
-  Link
+  Grid
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';

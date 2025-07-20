@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -40,11 +40,7 @@ const ProviderPortal = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    loadRequests();
-  }, [loadRequests]);
-
-  const loadRequests = async () => {
+  const loadRequests = useCallback(async () => {
     try {
       setLoading(true);
       const response = await requestService.getRequests({ providerId: user.providerId });
@@ -55,7 +51,11 @@ const ProviderPortal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.providerId]);
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
 
   const getStatusColor = (status) => {
     switch (status) {

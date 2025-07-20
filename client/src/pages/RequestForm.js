@@ -17,8 +17,7 @@ import {
   Step,
   StepLabel,
   Card,
-  CardContent,
-  Divider
+  CardContent
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { useAuth } from '../contexts/AuthContext';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -55,11 +55,7 @@ const DirectorDashboard = () => {
   const [approvalDialog, setApprovalDialog] = useState(false);
   const [approvalNotes, setApprovalNotes] = useState('');
 
-  useEffect(() => {
-    loadRequests();
-  }, [loadRequests]);
-
-  const loadRequests = async () => {
+  const loadRequests = useCallback(async () => {
     try {
       setLoading(true);
       const response = await requestService.getRequests(filters);
@@ -70,7 +66,11 @@ const DirectorDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
 
   const getStatusColor = (status) => {
     switch (status) {

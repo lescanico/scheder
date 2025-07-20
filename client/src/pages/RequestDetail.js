@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -46,11 +46,7 @@ const RequestDetail = () => {
   const [notes, setNotes] = useState('');
   const [notesType, setNotesType] = useState('');
 
-  useEffect(() => {
-    loadRequest();
-  }, [id]);
-
-  const loadRequest = async () => {
+  const loadRequest = useCallback(async () => {
     try {
       setLoading(true);
       const response = await requestService.getRequest(id);
@@ -61,7 +57,13 @@ const RequestDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadRequest();
+  }, [loadRequest]);
+
+
 
   const getStatusColor = (status) => {
     switch (status) {

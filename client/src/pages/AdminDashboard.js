@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -47,11 +47,7 @@ const AdminDashboard = () => {
     providerId: ''
   });
 
-  useEffect(() => {
-    loadRequests();
-  }, [loadRequests]);
-
-  const loadRequests = async () => {
+  const loadRequests = useCallback(async () => {
     try {
       setLoading(true);
       const response = await requestService.getRequests(filters);
@@ -62,7 +58,11 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    loadRequests();
+  }, [loadRequests]);
 
   const getStatusColor = (status) => {
     switch (status) {
