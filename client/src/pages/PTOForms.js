@@ -23,15 +23,6 @@ import {
 } from '@mui/icons-material';
 
 const PTOForms = () => {
-  const handleDownload = (filename, displayName) => {
-    const link = document.createElement('a');
-    link.href = `/${filename}`;
-    link.download = displayName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const forms = [
     {
       filename: 'Time off request form MD OPC 2024.pdf',
@@ -94,7 +85,11 @@ const PTOForms = () => {
                 <Button
                   variant="contained"
                   startIcon={<Download />}
-                  onClick={() => handleDownload(form.filename, form.displayName)}
+                  component="a"
+                  href={`/${form.filename}`}
+                  download={form.displayName}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   fullWidth
                   size="large"
                 >
