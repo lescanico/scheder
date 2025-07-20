@@ -16,6 +16,7 @@ import RequestForm from './pages/RequestForm';
 import RequestDetail from './pages/RequestDetail';
 import UserManagement from './pages/UserManagement';
 import PTOForms from './pages/PTOForms';
+import Reports from './pages/Reports';
 import Layout from './components/Layout';
 
 const theme = createTheme({
@@ -110,6 +111,16 @@ const AppContent = () => {
           element={
             <ProtectedRoute allowedRoles={['provider']}>
               <PTOForms />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Reports Route */}
+        <Route 
+          path="/reports" 
+          element={
+            <ProtectedRoute>
+              <Reports />
             </ProtectedRoute>
           } 
         />
