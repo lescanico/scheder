@@ -119,8 +119,8 @@ const Layout = ({ children }) => {
     <Box sx={{ width: 250 }}>
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
         <img 
-          src="/penn-psych.png" 
-          alt="Penn Psychiatry" 
+          src="/favicon.png" 
+          alt="Penn Psychiatry Logo" 
           style={{ height: 40, width: 'auto' }}
         />
         <Typography variant="h6" noWrap component="div">
@@ -208,8 +208,8 @@ const Layout = ({ children }) => {
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
             <img 
-              src="/penn-psych.png" 
-              alt="Penn Psychiatry" 
+              src="/favicon.png" 
+              alt="Penn Psychiatry Logo" 
               style={{ height: 32, width: 'auto' }}
             />
             <Typography variant="h6" noWrap component="div">

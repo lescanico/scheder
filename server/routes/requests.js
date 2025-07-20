@@ -16,12 +16,12 @@ let requests = [
     providerName: 'Dr. John Provider',
     providerEmail: 'provider@clinic.com',
     requestType: 'full_day',
-    startDate: '2024-01-15',
+    startDate: '2025-01-15',
     reason: 'Personal day off',
     ptoRequired: true,
     status: 'pending',
-    createdAt: '2024-01-10T10:00:00.000Z',
-    updatedAt: '2024-01-10T10:00:00.000Z'
+    createdAt: '2025-01-10T10:00:00.000Z',
+    updatedAt: '2025-01-10T10:00:00.000Z'
   },
   {
     id: 'req_2',
@@ -29,16 +29,16 @@ let requests = [
     providerName: 'Dr. John Provider',
     providerEmail: 'provider@clinic.com',
     requestType: 'specific_time',
-    startDate: '2024-01-20',
+    startDate: '2025-01-20',
     startTime: '14:00',
     endTime: '16:00',
     reason: 'Medical appointment',
     ptoRequired: false,
     status: 'approved',
-    approvedAt: '2024-01-11T09:00:00.000Z',
+    approvedAt: '2025-01-11T09:00:00.000Z',
     approvedBy: 'Admin Staff',
-    createdAt: '2024-01-09T14:30:00.000Z',
-    updatedAt: '2024-01-11T09:00:00.000Z'
+    createdAt: '2025-01-09T14:30:00.000Z',
+    updatedAt: '2025-01-11T09:00:00.000Z'
   }
 ];
 let nextId = 3;
@@ -407,15 +407,15 @@ router.get('/:id/conflicts', async (req, res) => {
       {
         id: 'apt_1',
         patientName: 'John Doe',
-        startDate: '2024-01-15T09:00:00Z',
-        endDate: '2024-01-15T10:00:00Z',
+        startDate: '2025-01-15T09:00:00Z',
+        endDate: '2025-01-15T10:00:00Z',
         status: 'scheduled'
       },
       {
         id: 'apt_2',
         patientName: 'Jane Smith',
-        startDate: '2024-01-15T14:00:00Z',
-        endDate: '2024-01-15T15:00:00Z',
+        startDate: '2025-01-15T14:00:00Z',
+        endDate: '2025-01-15T15:00:00Z',
         status: 'scheduled'
       }
     ];

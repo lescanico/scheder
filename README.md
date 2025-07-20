@@ -152,7 +152,7 @@ This project is developed for clinical use. For academic or research purposes, p
 
 ## License
 
-MIT License - Copyright (c) 2024 Nicolas Lescano, MD
+MIT License - Copyright (c) 2025 Nicolas Lescano, MD
 
 ## Support
 
