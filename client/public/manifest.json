@@ -1,12 +1,12 @@
 {
-  "short_name": "Scheder",
-  "name": "Scheder - Schedule Management",
-  "description": "Schedule Blocking Management System for Outpatient Psychiatry Clinic",
+  "short_name": "Penn Psychiatry",
+  "name": "Penn Psychiatry - Schedule Management",
+  "description": "Schedule Management System for Penn Psychiatry Clinic",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "penn-psych.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     }
   ],
   "start_url": ".",

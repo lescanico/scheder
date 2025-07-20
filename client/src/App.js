@@ -18,10 +18,10 @@ import Layout from './components/Layout';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#990000', // Penn Red
     },
     secondary: {
-      main: '#dc004e',
+      main: '#011F5B', // Penn Blue
     },
     background: {
       default: '#f5f5f5',

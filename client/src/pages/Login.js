@@ -98,15 +98,21 @@ const Login = () => {
             width: '100%',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlined />
-          </Avatar>
-          <Typography component="h1" variant="h4" gutterBottom>
-            Scheder
-          </Typography>
-          <Typography component="h2" variant="h6" color="text.secondary" gutterBottom>
-            Schedule Management System
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+            <img 
+              src="/penn-psych.png" 
+              alt="Penn Psychiatry" 
+              style={{ height: 48, width: 'auto' }}
+            />
+            <Box>
+              <Typography component="h1" variant="h4" gutterBottom>
+                Penn Psychiatry
+              </Typography>
+              <Typography component="h2" variant="h6" color="text.secondary">
+                Schedule Management System
+              </Typography>
+            </Box>
+          </Box>
           
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
             {error && (

@@ -110,9 +110,16 @@ const Layout = ({ children }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          Scheder
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <img 
+            src="/penn-psych.png" 
+            alt="Penn Psychiatry" 
+            style={{ height: 32, width: 'auto' }}
+          />
+          <Typography variant="h6" noWrap component="div">
+            Penn Psychiatry
+          </Typography>
+        </Box>
       </Toolbar>
       <Divider />
       <List>
@@ -154,9 +161,16 @@ const Layout = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Schedule Management System
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1 }}>
+            <img 
+              src="/penn-psych.png" 
+              alt="Penn Psychiatry" 
+              style={{ height: 32, width: 'auto' }}
+            />
+            <Typography variant="h6" noWrap component="div">
+              Penn Psychiatry - Schedule Management
+            </Typography>
+          </Box>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconButton color="inherit">
@@ -213,38 +227,11 @@ const Layout = ({ children }) => {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          mt: 8,
         }}
       >
-        <Toolbar />
         {children}
       </Box>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleProfileMenuClose}
-        onClick={handleProfileMenuClose}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <Person fontSize="small" />
-          </ListItemIcon>
-          Profile
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
-      </Menu>
     </Box>
   );
 };
