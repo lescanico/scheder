@@ -23,7 +23,7 @@ const Footer = () => {
         align="center"
         sx={{ fontSize: '0.875rem' }}
       >
-        © 2025 Nicolas Lescano, MD - Professor of Clinical Psychiatry, University of Pennsylvania
+        © 2025 Nicolas Lescano, MD
       </Typography>
       <Typography
         variant="body2"
