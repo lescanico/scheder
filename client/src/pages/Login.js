@@ -7,10 +7,8 @@ import {
   Typography,
   Alert,
   Container,
-  Avatar,
   Grid
 } from '@mui/material';
-import { LockOutlined } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 

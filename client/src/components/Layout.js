@@ -1,43 +1,38 @@
 import React, { useState } from 'react';
 import {
   AppBar,
-  Box,
-  CssBaseline,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
   Avatar,
-  Menu,
-  MenuItem,
   Divider,
-  Badge
+  Button
 } from '@mui/material';
 import {
   Menu as MenuIcon,
   Dashboard,
-  Person,
-  AdminPanelSettings,
-  SupervisorAccount,
-  Add,
-  Notifications,
-  Settings,
-  Logout
+  Schedule,
+  People,
+  Assessment,
+  AccountCircle,
+  Notifications
 } from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Footer from './Footer';
-
-const drawerWidth = 240;
 
 const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,155 +41,92 @@ const Layout = ({ children }) => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    logout();
     navigate('/login');
   };
 
-  const getNavigationItems = () => {
-    const baseItems = [
-      {
-        text: 'Dashboard',
-        icon: <Dashboard />,
-        path: '/dashboard'
-      }
-    ];
-
-    if (user?.role === 'provider') {
-      baseItems.push(
-        {
-          text: 'My Portal',
-          icon: <Person />,
-          path: '/provider'
-        },
-        {
-          text: 'New Request',
-          icon: <Add />,
-          path: '/request/new'
-        }
-      );
-    }
-
-    if (user?.role === 'admin') {
-      baseItems.push(
-        {
-          text: 'Admin Dashboard',
-          icon: <AdminPanelSettings />,
-          path: '/admin'
-        }
-      );
-    }
-
-    if (user?.role === 'director') {
-      baseItems.push(
-        {
-          text: 'Director Dashboard',
-          icon: <SupervisorAccount />,
-          path: '/director'
-        }
-      );
-    }
-
-    return baseItems;
-  };
-
-  const navigationItems = getNavigationItems();
+  const menuItems = [
+    { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
+    { text: 'Schedule Requests', icon: <Schedule />, path: '/requests' },
+    { text: 'Users', icon: <People />, path: '/users' },
+    { text: 'Reports', icon: <Assessment />, path: '/reports' },
+  ];
 
   const drawer = (
-    <div>
-      <Toolbar>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <img 
-            src="/penn-psych.png" 
-            alt="Penn Psychiatry" 
-            style={{ height: 32, width: 'auto' }}
-          />
-          <Typography variant="h6" noWrap component="div">
-            Penn Psychiatry
-          </Typography>
-        </Box>
-      </Toolbar>
+    <Box sx={{ width: 250 }}>
+      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <img 
+          src="/penn-psych.png" 
+          alt="Penn Psychiatry" 
+          style={{ height: 40, width: 'auto' }}
+        />
+        <Typography variant="h6" noWrap component="div">
+          Penn Psychiatry
+        </Typography>
+      </Box>
       <Divider />
       <List>
-        {navigationItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              selected={location.pathname === item.path}
-              onClick={() => {
-                navigate(item.path);
-                setMobileOpen(false);
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
+        {menuItems.map((item) => (
+          <ListItem
+            button
+            key={item.text}
+            onClick={() => {
+              navigate(item.path);
+              if (isMobile) setMobileOpen(false);
+            }}
+            selected={location.pathname === item.path}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
           </ListItem>
         ))}
       </List>
-    </div>
+    </Box>
   );
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { md: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1 }}>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
             <img 
               src="/penn-psych.png" 
               alt="Penn Psychiatry" 
               style={{ height: 32, width: 'auto' }}
             />
             <Typography variant="h6" noWrap component="div">
-              Penn Psychiatry - Schedule Management
+              Schedule Management System
             </Typography>
           </Box>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconButton color="inherit">
-              <Badge badgeContent={4} color="error">
-                <Notifications />
-              </Badge>
+              <Notifications />
             </IconButton>
-            
-            <IconButton
-              onClick={handleProfileMenuOpen}
-              sx={{ ml: 1 }}
-            >
-              <Avatar sx={{ width: 32, height: 32 }}>
-                {user?.name?.charAt(0) || 'U'}
-              </Avatar>
+            <IconButton color="inherit">
+              <AccountCircle />
             </IconButton>
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
-      
+
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { md: 250 }, flexShrink: { md: 0 } }}
       >
         <Drawer
           variant="temporary"
@@ -204,8 +136,8 @@ const Layout = ({ children }) => {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
           }}
         >
           {drawer}
@@ -213,30 +145,29 @@ const Layout = ({ children }) => {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
           }}
           open
         >
           {drawer}
         </Drawer>
       </Box>
-      
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          p: 3,
+          width: { md: `calc(100% - 250px)` },
+          ml: { md: '250px' },
+          mt: '64px',
         }}
       >
-        <Box sx={{ mt: 8, p: 3, flexGrow: 1 }}>
-          {children}
-        </Box>
-        <Footer />
+        {children}
       </Box>
+      
+      <Footer />
     </Box>
   );
 };
