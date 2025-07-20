@@ -49,7 +49,11 @@ const ProviderPortal = () => {
   const loadRequests = useCallback(async () => {
     try {
       setLoading(true);
+      console.log('ProviderPortal - Loading requests for providerId:', user.providerId);
+      console.log('ProviderPortal - User data:', user);
+      
       const response = await requestService.getRequests({ providerId: user.providerId });
+      console.log('ProviderPortal - Response:', response);
       setRequests(response.data);
     } catch (error) {
       setError('Failed to load requests');

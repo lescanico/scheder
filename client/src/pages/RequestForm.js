@@ -17,9 +17,11 @@ import {
   Step,
   StepLabel,
   Card,
-  CardContent
+  CardContent,
+  InputAdornment
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { Upload, Description } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { requestService } from '../services/requestService';
 import { useNavigate } from 'react-router-dom';
@@ -42,6 +44,7 @@ const RequestForm = () => {
     endTime: null,
     reason: '',
     ptoRequired: false,
+    ptoFile: null,
     recurringPattern: '',
     recurringDays: [],
     recurringMonths: []
@@ -64,14 +67,21 @@ const RequestForm = () => {
     { value: 'sunday', label: 'Sunday' }
   ];
 
-
-
   const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
+    if (isStepValid()) {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFormData({ ...formData, ptoFile: file });
+    }
   };
 
   const handleSubmit = async () => {
@@ -117,7 +127,8 @@ const RequestForm = () => {
         if (formData.requestType === 'specific_time') {
           return formData.startDate && formData.startTime && formData.endTime;
         } else if (formData.requestType === 'multiple_days') {
-          return formData.startDate && formData.endDate;
+          return formData.startDate && formData.endDate && 
+                 formData.endDate >= formData.startDate;
         } else if (formData.requestType === 'recurring') {
           return formData.recurringPattern;
         } else {
@@ -128,6 +139,15 @@ const RequestForm = () => {
       default:
         return false;
     }
+  };
+
+  const getDateValidationError = () => {
+    if (formData.requestType === 'multiple_days' && formData.startDate && formData.endDate) {
+      if (formData.endDate < formData.startDate) {
+        return 'End date must be after start date';
+      }
+    }
+    return null;
   };
 
   const renderStepContent = (step) => {
@@ -177,6 +197,27 @@ const RequestForm = () => {
                   label="PTO Form Required"
                 />
               </Grid>
+              {formData.ptoRequired && (
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    type="file"
+                    label="Upload PTO Form"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Upload />
+                        </InputAdornment>
+                      ),
+                    }}
+                    inputProps={{
+                      accept: '.pdf,.doc,.docx'
+                    }}
+                    onChange={handleFileChange}
+                    helperText="Upload your PTO request form (PDF, DOC, DOCX)"
+                  />
+                </Grid>
+              )}
             </Grid>
           </Box>
         );
@@ -243,7 +284,14 @@ const RequestForm = () => {
                       label="End Date"
                       value={formData.endDate}
                       onChange={(date) => setFormData({ ...formData, endDate: date })}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
+                      renderInput={(params) => (
+                        <TextField 
+                          {...params} 
+                          fullWidth 
+                          error={!!getDateValidationError()}
+                          helperText={getDateValidationError()}
+                        />
+                      )}
                     />
                   </Grid>
                 </>
@@ -315,6 +363,11 @@ const RequestForm = () => {
                 <Typography variant="subtitle1" gutterBottom>
                   <strong>PTO Required:</strong> {formData.ptoRequired ? 'Yes' : 'No'}
                 </Typography>
+                {formData.ptoFile && (
+                  <Typography variant="subtitle1" gutterBottom>
+                    <strong>PTO File:</strong> {formData.ptoFile.name}
+                  </Typography>
+                )}
                 {formData.startDate && (
                   <Typography variant="subtitle1" gutterBottom>
                     <strong>Start Date:</strong> {formData.startDate.toLocaleDateString()}
