@@ -28,7 +28,6 @@ import {
   Cancel,
   Pending
 } from '@mui/icons-material';
-import { useAuth } from '../contexts/AuthContext';
 import { requestService } from '../services/requestService';
 
 const Reports = () => {

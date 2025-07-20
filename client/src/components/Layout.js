@@ -97,9 +97,12 @@ const Layout = ({ children }) => {
       );
     }
 
-    baseItems.push(
-      { text: 'Reports', icon: <Assessment />, path: '/reports' }
-    );
+    // Only show Reports for admin and director
+    if (user?.role === 'admin' || user?.role === 'director') {
+      baseItems.push(
+        { text: 'Reports', icon: <Assessment />, path: '/reports' }
+      );
+    }
 
     return baseItems;
   };
