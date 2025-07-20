@@ -31,6 +31,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Footer from './Footer';
 
 const drawerWidth = 240;
 
@@ -142,7 +143,7 @@ const Layout = ({ children }) => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -225,12 +226,16 @@ const Layout = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: 8,
+          ml: { sm: `${drawerWidth}px` },
         }}
       >
-        {children}
+        <Box sx={{ mt: 8, p: 3, flexGrow: 1 }}>
+          {children}
+        </Box>
+        <Footer />
       </Box>
     </Box>
   );

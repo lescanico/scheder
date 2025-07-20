@@ -79,134 +79,174 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Paper
-          elevation={3}
+    <Box sx={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      bgcolor: 'background.default' 
+    }}>
+      <Container component="main" maxWidth="sm" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+        <Box
           sx={{
-            padding: 4,
+            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-            <img 
-              src="/penn-psych.png" 
-              alt="Penn Psychiatry" 
-              style={{ height: 48, width: 'auto' }}
-            />
-            <Box>
-              <Typography component="h1" variant="h4" gutterBottom>
-                Penn Psychiatry
+          <Paper
+            elevation={3}
+            sx={{
+              padding: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: '100%',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+              <img 
+                src="/penn-psych.png" 
+                alt="Penn Psychiatry" 
+                style={{ height: 48, width: 'auto' }}
+              />
+              <Box>
+                <Typography component="h1" variant="h4" gutterBottom>
+                  Penn Psychiatry
+                </Typography>
+                <Typography component="h2" variant="h6" color="text.secondary">
+                  Schedule Management System
+                </Typography>
+              </Box>
+            </Box>
+            
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+              )}
+              
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disabled={loading}
+              >
+                {loading ? 'Signing In...' : 'Sign In'}
+              </Button>
+            </Box>
+
+            <Box sx={{ mt: 3, width: '100%' }}>
+              <Typography variant="h6" gutterBottom align="center">
+                Demo Accounts
               </Typography>
-              <Typography component="h2" variant="h6" color="text.secondary">
-                Schedule Management System
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={4}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => handleDemoLogin('provider')}
+                    disabled={loading}
+                    sx={{ mb: 1 }}
+                  >
+                    Provider
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => handleDemoLogin('admin')}
+                    disabled={loading}
+                    sx={{ mb: 1 }}
+                  >
+                    Admin
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => handleDemoLogin('director')}
+                    disabled={loading}
+                    sx={{ mb: 1 }}
+                  >
+                    Director
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+
+            <Box sx={{ mt: 3, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                Demo accounts use password: <strong>password</strong>
               </Typography>
             </Box>
-          </Box>
-          
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-            
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              disabled={loading}
-            >
-              {loading ? 'Signing In...' : 'Sign In'}
-            </Button>
-          </Box>
-
-          <Box sx={{ mt: 3, width: '100%' }}>
-            <Typography variant="h6" gutterBottom align="center">
-              Demo Accounts
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleDemoLogin('provider')}
-                  disabled={loading}
-                  sx={{ mb: 1 }}
-                >
-                  Provider
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleDemoLogin('admin')}
-                  disabled={loading}
-                  sx={{ mb: 1 }}
-                >
-                  Admin
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleDemoLogin('director')}
-                  disabled={loading}
-                  sx={{ mb: 1 }}
-                >
-                  Director
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-
-          <Box sx={{ mt: 3, textAlign: 'center' }}>
-            <Typography variant="body2" color="text.secondary">
-              Demo accounts use password: <strong>password</strong>
-            </Typography>
-          </Box>
-        </Paper>
+          </Paper>
+        </Box>
+      </Container>
+      
+      {/* Footer for login page */}
+      <Box
+        component="footer"
+        sx={{
+          py: 2,
+          px: 2,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
+              ? theme.palette.grey[200]
+              : theme.palette.grey[800],
+          borderTop: 1,
+          borderColor: 'divider',
+        }}
+      >
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ fontSize: '0.875rem' }}
+        >
+          © 2025 Nicolas Lescano, MD - Professor of Clinical Psychiatry, University of Pennsylvania
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ fontSize: '0.75rem', mt: 0.5 }}
+        >
+          Developed for clinical workflow optimization at the University of Pennsylvania Department of Psychiatry
+        </Typography>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
