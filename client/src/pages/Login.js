@@ -39,42 +39,7 @@ const Login = () => {
     }
   };
 
-  const handleDemoLogin = async (role) => {
-    setLoading(true);
-    setError('');
-
-    let demoEmail, demoPassword;
-    
-    switch (role) {
-      case 'provider':
-        demoEmail = 'provider@clinic.com';
-        demoPassword = 'password';
-        break;
-      case 'admin':
-        demoEmail = 'admin@clinic.com';
-        demoPassword = 'password';
-        break;
-      case 'director':
-        demoEmail = 'director@clinic.com';
-        demoPassword = 'password';
-        break;
-      default:
-        return;
-    }
-
-    try {
-      const result = await login(demoEmail, demoPassword);
-      if (result.success) {
-        navigate('/dashboard');
-      } else {
-        setError(result.error);
-      }
-    } catch (error) {
-      setError('An unexpected error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Remove handleDemoLogin and demo account UI
 
   return (
     <Box sx={{ 
@@ -162,53 +127,6 @@ const Login = () => {
               >
                 Don't have an account? Register
               </Button>
-            </Box>
-
-            <Box sx={{ mt: 3, width: '100%' }}>
-              <Typography variant="h6" gutterBottom align="center">
-                Demo Accounts
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => handleDemoLogin('provider')}
-                    disabled={loading}
-                    sx={{ mb: 1 }}
-                  >
-                    Provider
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => handleDemoLogin('admin')}
-                    disabled={loading}
-                    sx={{ mb: 1 }}
-                  >
-                    Admin
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => handleDemoLogin('director')}
-                    disabled={loading}
-                    sx={{ mb: 1 }}
-                  >
-                    Director
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-
-            <Box sx={{ mt: 3, textAlign: 'center' }}>
-              <Typography variant="body2" color="text.secondary">
-                Demo accounts use password: <strong>password</strong>
-              </Typography>
             </Box>
           </Paper>
         </Box>
