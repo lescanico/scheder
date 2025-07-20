@@ -243,7 +243,7 @@ const Login = () => {
           align="center"
           sx={{ fontSize: '0.75rem', mt: 0.5 }}
         >
-          Developed for clinical workflow optimization at the University of Pennsylvania Department of Psychiatry
+          Developed for operational workflow optimization at the University of Pennsylvania Department of Psychiatry
         </Typography>
       </Box>
     </Box>
