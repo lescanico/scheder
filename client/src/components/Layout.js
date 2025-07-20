@@ -54,15 +54,20 @@ const Layout = ({ children }) => {
 
   const handleScheduleRequestsClick = () => {
     console.log('Schedule Requests clicked, user role:', user?.role);
+    console.log('Full user object:', user);
+    
     // Route to appropriate dashboard based on user role
     if (user?.role === 'provider') {
+      console.log('Navigating to provider dashboard');
       navigate('/provider');
     } else if (user?.role === 'admin') {
+      console.log('Navigating to admin dashboard');
       navigate('/admin');
     } else if (user?.role === 'director') {
+      console.log('Navigating to director dashboard');
       navigate('/director');
     } else {
-      console.log('No specific role found, navigating to dashboard');
+      console.log('No specific role found or user not loaded, navigating to dashboard');
       navigate('/dashboard');
     }
   };
@@ -70,17 +75,13 @@ const Layout = ({ children }) => {
   const getMenuItems = () => {
     const baseItems = [
       { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-    ];
-
-    // Add Schedule Requests based on user role
-    if (user?.role) {
-      baseItems.push({
+      { 
         text: 'Schedule Requests', 
         icon: <Schedule />, 
-        path: user.role === 'provider' ? '/provider' : user.role === 'admin' ? '/admin' : user.role === 'director' ? '/director' : '/dashboard',
+        path: '/dashboard', // Default to dashboard
         onClick: handleScheduleRequestsClick
-      });
-    }
+      },
+    ];
 
     // Add PTO Forms menu for provider role
     if (user?.role === 'provider') {
