@@ -13,7 +13,8 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
-  Button
+  Button,
+  CircularProgress
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -33,9 +34,14 @@ const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { logout, user } = useAuth();
+  const { logout, user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Debug user data
+  console.log('Layout - User data:', user);
+  console.log('Layout - User role:', user?.role);
+  console.log('Layout - Loading:', loading);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -47,6 +53,7 @@ const Layout = ({ children }) => {
   };
 
   const handleScheduleRequestsClick = () => {
+    console.log('Schedule Requests clicked, user role:', user?.role);
     // Route to appropriate dashboard based on user role
     if (user?.role === 'provider') {
       navigate('/provider');
@@ -55,6 +62,7 @@ const Layout = ({ children }) => {
     } else if (user?.role === 'director') {
       navigate('/director');
     } else {
+      console.log('No specific role found, navigating to dashboard');
       navigate('/dashboard');
     }
   };
@@ -62,13 +70,17 @@ const Layout = ({ children }) => {
   const getMenuItems = () => {
     const baseItems = [
       { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-      { 
+    ];
+
+    // Add Schedule Requests based on user role
+    if (user?.role) {
+      baseItems.push({
         text: 'Schedule Requests', 
         icon: <Schedule />, 
-        path: user?.role === 'provider' ? '/provider' : user?.role === 'admin' ? '/admin' : user?.role === 'director' ? '/director' : '/dashboard',
+        path: user.role === 'provider' ? '/provider' : user.role === 'admin' ? '/admin' : user.role === 'director' ? '/director' : '/dashboard',
         onClick: handleScheduleRequestsClick
-      },
-    ];
+      });
+    }
 
     // Add PTO Forms menu for provider role
     if (user?.role === 'provider') {
@@ -93,6 +105,15 @@ const Layout = ({ children }) => {
 
   const menuItems = getMenuItems();
 
+  // Show loading spinner if still loading
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   const drawer = (
     <Box sx={{ width: 250 }}>
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -112,6 +133,7 @@ const Layout = ({ children }) => {
             button
             key={item.text}
             onClick={() => {
+              console.log('Menu item clicked:', item.text, 'Path:', item.path);
               if (item.onClick) {
                 item.onClick();
               } else {
