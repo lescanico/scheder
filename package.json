@@ -28,6 +28,6 @@
     "concurrently": "^8.2.0"
   },
   "keywords": ["schedule", "blocking", "psychiatry", "clinic", "management"],
-  "author": "Your Name",
+  "author": "Nicolas Lescano, MD - Professor of Clinical Psychiatry, University of Pennsylvania",
   "license": "MIT"
 } 

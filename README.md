@@ -1,70 +1,99 @@
-# Scheder - Schedule Blocking Management System
+# Scheder - Schedule Management System
 
-A comprehensive MPV solution for managing schedule blocking requests at an outpatient psychiatry clinic.
+A comprehensive schedule blocking management system designed for outpatient psychiatry clinics. This application streamlines the process of managing provider schedule blocking requests, PTO approvals, and administrative workflows.
+
+## Author
+
+**Nicolas Lescano, MD**  
+Professor of Clinical Psychiatry  
+University of Pennsylvania
 
 ## Features
 
-### Core Functionality
-- **Schedule Blocking Requests**: Providers can submit requests to block their schedules
-- **Multiple Block Types**: Support for specific time periods, full days, multiple days, and recurring blocks
-- **PTO Integration**: Built-in PTO request form handling with director approval workflow
-- **Email Notifications**: Automated email notifications for all stakeholders
-- **Admin Dashboard**: Comprehensive admin interface for managing requests
-- **Provider Portal**: Simple interface for providers to submit and track requests
+### Role-Based Access Control
+- **Provider Portal**: Submit schedule blocking requests, upload PTO forms, track request status
+- **Admin Dashboard**: Review requests, manage schedules, send clarifications, approve/reject requests
+- **Director Dashboard**: Final approval authority, PTO form review, comprehensive oversight
 
-### Request Types Supported
-1. **Specific Time Period**: Block specific hours within a single day
-2. **Full Day**: Block entire single day
-3. **Multiple Days**: Block contiguous or non-contiguous days
-4. **Recurring Blocks**: Weekly or monthly recurring schedule blocks
+### Request Types
+- **Specific Time Period**: Block specific hours on a given date
+- **Full Day**: Block entire day for appointments or meetings
+- **Multiple Days**: Extended time off or conference attendance
+- **Recurring**: Regular weekly/monthly schedule blocks
 
-## Tech Stack
+### Workflow Management
+- **Automated Email Notifications**: Real-time updates to all stakeholders
+- **PTO Form Upload**: Secure document management for leave requests
+- **Status Tracking**: Complete audit trail of request lifecycle
+- **Conflict Resolution**: Automatic detection of scheduling conflicts
 
-### Backend
-- **Node.js** with Express.js
-- **Nodemailer** for email notifications
-- **Multer** for file uploads (PTO forms)
-- **Moment.js** for date/time handling
-- **JWT** for authentication
+### Technical Features
+- **Modern React Frontend**: Material-UI components, responsive design
+- **Node.js Backend**: RESTful API with JWT authentication
+- **Email Integration**: Automated notifications using Nodemailer
+- **File Upload**: Secure PTO form handling with Multer
+- **Role-Based Security**: JWT-based authentication and authorization
+
+## Demo Accounts
+
+For testing purposes, the following demo accounts are available:
+
+- **Provider**: `provider@clinic.com` / `password`
+- **Admin**: `admin@clinic.com` / `password`
+- **Director**: `director@clinic.com` / `password`
+
+## Technology Stack
 
 ### Frontend
-- **React** with modern hooks
-- **Material-UI** for beautiful, responsive UI
-- **React Router** for navigation
-- **Axios** for API communication
-- **Date-fns** for date manipulation
+- React 18
+- Material-UI (MUI)
+- React Router
+- Axios for API communication
+- Date-fns for date handling
+
+### Backend
+- Node.js with Express
+- JWT for authentication
+- Nodemailer for email notifications
+- Multer for file uploads
+- Express-validator for input validation
+
+### Deployment
+- **Frontend**: Vercel (free tier)
+- **Backend**: Fly.io (free tier)
+- **Database**: In-memory storage (can be upgraded to PostgreSQL)
 
 ## Quick Start
 
 ### Prerequisites
-- Node.js (v16 or higher)
+- Node.js 18+
 - npm or yarn
 
 ### Installation
 
-1. **Clone and install dependencies**:
+1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/lescanico/scheder.git
    cd scheder
+   ```
+
+2. **Install dependencies**
+   ```bash
    npm run install-all
    ```
 
-2. **Set up environment variables**:
+3. **Set up environment variables**
    ```bash
-   cp .env.example .env
-   # Edit .env with your email and other configuration
+   cp env.example .env
+   # Edit .env with your configuration
    ```
 
-3. **Start the development servers**:
+4. **Start development servers**
    ```bash
    npm run dev
    ```
 
-4. **Access the application**:
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:5000
-
-## Environment Variables
+### Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -73,96 +102,62 @@ Create a `.env` file in the root directory:
 PORT=5000
 NODE_ENV=development
 
-# Email Configuration (for notifications)
+# JWT Configuration
+JWT_SECRET=your-secret-key-here
+
+# Email Configuration (Gmail)
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-app-password
 
-# JWT Secret
-JWT_SECRET=your-secret-key
-
-# File Upload
-UPLOAD_PATH=./uploads
-MAX_FILE_SIZE=5242880
+# Frontend URL
+FRONTEND_URL=http://localhost:3000
 ```
 
-## Usage
+## Deployment
 
-### For Providers
-1. Navigate to the Provider Portal
-2. Submit a new schedule blocking request
-3. Upload PTO form if required
-4. Track request status
-5. Receive email notifications
+### Frontend (Vercel)
+1. Connect your GitHub repository to Vercel
+2. Set build directory to `client`
+3. Add environment variable: `REACT_APP_API_URL=https://your-backend-url.com/api`
 
-### For Admin Staff
-1. Access the Admin Dashboard
-2. Review pending requests
-3. Check provider schedules
-4. Cancel/reschedule conflicting appointments
-5. Approve or reject requests
-6. Send clarification emails if needed
-
-### For Directors
-1. Review PTO requests
-2. Sign and return PTO forms
-3. Approve final requests
+### Backend (Fly.io)
+1. Install Fly CLI: `curl -L https://fly.io/install.sh | sh`
+2. Authenticate: `flyctl auth login`
+3. Deploy: `flyctl launch`
+4. Set secrets: `flyctl secrets set JWT_SECRET=your-secret`
 
 ## API Endpoints
 
 ### Authentication
 - `POST /api/auth/login` - User login
 - `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
 
-### Schedule Blocking Requests
-- `GET /api/requests` - Get all requests
+### Requests
+- `GET /api/requests` - Get all requests (with filters)
 - `POST /api/requests` - Create new request
 - `GET /api/requests/:id` - Get specific request
-- `PUT /api/requests/:id` - Update request
+- `PATCH /api/requests/:id/status` - Update request status
 - `DELETE /api/requests/:id` - Delete request
 
-### Email Notifications
-- `POST /api/notifications/send` - Send notification
-- `GET /api/notifications/history` - Get notification history
-
 ### File Upload
-- `POST /api/upload` - Upload PTO forms
-- `GET /api/files/:filename` - Download files
-
-## Project Structure
-
-```
-scheder/
-├── client/                 # React frontend
-│   ├── public/
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API services
-│   │   ├── utils/         # Utility functions
-│   │   └── App.js
-│   └── package.json
-├── server/                 # Node.js backend
-│   ├── controllers/       # Route controllers
-│   ├── middleware/        # Custom middleware
-│   ├── models/           # Data models
-│   ├── routes/           # API routes
-│   ├── services/         # Business logic
-│   └── index.js
-├── uploads/              # File uploads
-├── package.json
-└── README.md
-```
+- `POST /api/upload/pto/:id` - Upload PTO form
+- `GET /api/upload/:filename` - Download file
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+This project is developed for clinical use. For academic or research purposes, please contact the author.
 
 ## License
 
-MIT License - see LICENSE file for details 
+MIT License - Copyright (c) 2024 Nicolas Lescano, MD
+
+## Support
+
+For technical support or questions about implementation in clinical settings, please contact the author.
+
+---
+
+**Developed for clinical workflow optimization at the University of Pennsylvania Department of Psychiatry.** 
