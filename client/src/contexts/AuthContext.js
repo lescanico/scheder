@@ -19,33 +19,40 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check if user is already logged in
     const token = localStorage.getItem('token');
+    console.log('AuthContext - Token exists:', !!token);
+    
     if (token) {
+      console.log('AuthContext - Attempting to load user data...');
       authService.getCurrentUser()
         .then(userData => {
-          console.log('User data loaded:', userData);
+          console.log('AuthContext - User data loaded successfully:', userData);
           setUser(userData);
           setIsAuthenticated(true);
         })
         .catch((error) => {
-          console.error('Error loading user data:', error);
+          console.error('AuthContext - Error loading user data:', error);
+          console.error('AuthContext - Error response:', error.response);
           localStorage.removeItem('token');
           setUser(null);
           setIsAuthenticated(false);
         })
         .finally(() => {
+          console.log('AuthContext - Setting loading to false');
           setLoading(false);
         });
     } else {
+      console.log('AuthContext - No token found, setting loading to false');
       setLoading(false);
     }
   }, []);
 
   const login = async (email, password) => {
     try {
+      console.log('AuthContext - Attempting login...');
       const response = await authService.login(email, password);
       const { user: userData, token } = response.data;
       
-      console.log('Login successful, user data:', userData);
+      console.log('AuthContext - Login successful, user data:', userData);
       
       localStorage.setItem('token', token);
       setUser(userData);
@@ -53,7 +60,7 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('AuthContext - Login error:', error);
       return { 
         success: false, 
         error: error.response?.data?.error || 'Login failed' 
@@ -65,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await authService.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('AuthContext - Logout error:', error);
     } finally {
       localStorage.removeItem('token');
       setUser(null);
@@ -99,6 +106,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     register
   };
+
+  console.log('AuthContext - Current state:', { user, isAuthenticated, loading });
 
   if (loading) {
     return <div>Loading...</div>;
