@@ -22,7 +22,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  TextField,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -58,7 +57,7 @@ const DirectorDashboard = () => {
 
   useEffect(() => {
     loadRequests();
-  }, []);
+  }, [loadRequests]);
 
   const loadRequests = async () => {
     try {

@@ -42,7 +42,7 @@ const ProviderPortal = () => {
 
   useEffect(() => {
     loadRequests();
-  }, []);
+  }, [loadRequests]);
 
   const loadRequests = async () => {
     try {

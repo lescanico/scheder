@@ -25,7 +25,6 @@ import {
   AdminPanelSettings,
   SupervisorAccount,
   Add,
-  List as ListIcon,
   Notifications,
   Settings,
   Logout

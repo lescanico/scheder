@@ -49,7 +49,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
 // Main App Component
 const AppContent = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
     return (

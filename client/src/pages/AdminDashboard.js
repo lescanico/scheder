@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     loadRequests();
-  }, []);
+  }, [loadRequests]);
 
   const loadRequests = async () => {
     try {
