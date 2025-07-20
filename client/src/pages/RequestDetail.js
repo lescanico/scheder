@@ -45,6 +45,7 @@ const RequestDetail = () => {
   const [notesDialog, setNotesDialog] = useState(false);
   const [notes, setNotes] = useState('');
   const [notesType, setNotesType] = useState('');
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   const loadRequest = useCallback(async () => {
     try {
@@ -63,7 +64,25 @@ const RequestDetail = () => {
     loadRequest();
   }, [loadRequest]);
 
+  const handleEditRequest = () => {
+    // Navigate to edit form
+    navigate(`/request/${id}/edit`);
+  };
 
+  const handleDeleteRequest = () => {
+    setDeleteDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await requestService.deleteRequest(id);
+      setDeleteDialog(false);
+      navigate('/provider'); // Navigate back to provider portal
+    } catch (error) {
+      setError('Failed to delete request');
+      console.error('Delete request error:', error);
+    }
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -93,7 +112,7 @@ const RequestDetail = () => {
 
   const getRequestTypeDisplay = (type) => {
     const types = {
-      'specific_time': 'Specific Time Period',
+      'specific_time': 'Specific Time',
       'full_day': 'Full Day',
       'multiple_days': 'Multiple Days',
       'recurring': 'Recurring'
@@ -119,11 +138,11 @@ const RequestDetail = () => {
     try {
       if (notesType === 'admin') {
         await requestService.addAdminNotes(id, notes);
-      } else if (notesType === 'director') {
+      } else {
         await requestService.addDirectorNotes(id, notes);
       }
       setNotesDialog(false);
-      loadRequest();
+      loadRequest(); // Reload to show new notes
     } catch (error) {
       setError('Failed to add notes');
       console.error('Add notes error:', error);
@@ -140,116 +159,193 @@ const RequestDetail = () => {
 
   if (error) {
     return (
-      <Alert severity="error" sx={{ mb: 2 }}>
-        {error}
-      </Alert>
+      <Box>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBack />}
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
+      </Box>
     );
   }
 
   if (!request) {
     return (
-      <Alert severity="warning">
-        Request not found
-      </Alert>
+      <Box>
+        <Typography variant="h6" color="text.secondary">
+          Request not found
+        </Typography>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBack />}
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
+      </Box>
     );
   }
 
   return (
     <Box>
       <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
-        <IconButton onClick={() => navigate(-1)}>
-          <ArrowBack />
-        </IconButton>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBack />}
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </Button>
         <Typography variant="h4">
           Request Details
         </Typography>
-        <Chip
-          icon={getStatusIcon(request.status)}
-          label={request.status}
-          color={getStatusColor(request.status)}
-          sx={{ ml: 'auto' }}
-        />
       </Box>
 
       <Grid container spacing={3}>
-        {/* Request Information */}
+        {/* Main Content */}
         <Grid item xs={12} md={8}>
+          {/* Request Information */}
           <Card>
             <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Request Information
-              </Typography>
-              
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <Typography variant="subtitle2" color="text.secondary">
-                    Provider
+                    Request Type
                   </Typography>
-                  <Typography variant="body1">
-                    {request.providerName}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {request.providerEmail}
+                  <Typography variant="body1" sx={{ mb: 2 }}>
+                    {getRequestTypeDisplay(request.requestType)}
                   </Typography>
                 </Grid>
                 
                 <Grid item xs={12} sm={6}>
                   <Typography variant="subtitle2" color="text.secondary">
-                    Request Type
+                    Status
                   </Typography>
-                  <Typography variant="body1">
-                    {getRequestTypeDisplay(request.requestType)}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Date Range
-                  </Typography>
-                  <Typography variant="body1">
-                    {request.requestType === 'specific_time' && (
-                      `${formatDate(request.startDate)} ${request.startTime} - ${request.endTime}`
-                    )}
-                    {request.requestType === 'full_day' && (
-                      formatDate(request.startDate)
-                    )}
-                    {request.requestType === 'multiple_days' && (
-                      `${formatDate(request.startDate)} - ${formatDate(request.endDate)}`
-                    )}
-                    {request.requestType === 'recurring' && (
-                      `Recurring: ${request.recurringPattern}`
-                    )}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Reason
-                  </Typography>
-                  <Typography variant="body1">
-                    {request.reason}
-                  </Typography>
+                  <Chip
+                    icon={getStatusIcon(request.status)}
+                    label={request.status}
+                    color={getStatusColor(request.status)}
+                    sx={{ mb: 2 }}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
                   <Typography variant="subtitle2" color="text.secondary">
-                    PTO Required
+                    Provider
                   </Typography>
-                  <Chip
-                    label={request.ptoRequired ? 'Yes' : 'No'}
-                    color={request.ptoRequired ? 'warning' : 'default'}
-                    size="small"
-                  />
+                  <Typography variant="body1" sx={{ mb: 2 }}>
+                    {request.providerName}
+                  </Typography>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
                   <Typography variant="subtitle2" color="text.secondary">
                     Created
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body1" sx={{ mb: 2 }}>
                     {formatDateTime(request.createdAt)}
                   </Typography>
                 </Grid>
+
+                {request.requestType === 'specific_time' && (
+                  <>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Date
+                      </Typography>
+                      <Typography variant="body1" sx={{ mb: 2 }}>
+                        {formatDate(request.startDate)}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Time
+                      </Typography>
+                      <Typography variant="body1" sx={{ mb: 2 }}>
+                        {request.startTime} - {request.endTime}
+                      </Typography>
+                    </Grid>
+                  </>
+                )}
+
+                {request.requestType === 'full_day' && (
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Date
+                    </Typography>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                      {formatDate(request.startDate)}
+                    </Typography>
+                  </Grid>
+                )}
+
+                {request.requestType === 'multiple_days' && (
+                  <>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Start Date
+                      </Typography>
+                      <Typography variant="body1" sx={{ mb: 2 }}>
+                        {formatDate(request.startDate)}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        End Date
+                      </Typography>
+                      <Typography variant="body1" sx={{ mb: 2 }}>
+                        {formatDate(request.endDate)}
+                      </Typography>
+                    </Grid>
+                  </>
+                )}
+
+                {request.requestType === 'recurring' && (
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Pattern
+                    </Typography>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                      {request.recurringPattern}
+                    </Typography>
+                  </Grid>
+                )}
+
+                <Grid item xs={12}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Reason
+                  </Typography>
+                  <Typography variant="body1" sx={{ mb: 2 }}>
+                    {request.reason}
+                  </Typography>
+                </Grid>
+
+                {request.ptoRequired && (
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      PTO Form Required
+                    </Typography>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                      {request.ptoFormPath ? (
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          href={request.ptoFormPath}
+                          target="_blank"
+                        >
+                          View PTO Form
+                        </Button>
+                      ) : (
+                        'Not uploaded yet'
+                      )}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
             </CardContent>
           </Card>
@@ -375,6 +471,7 @@ const RequestDetail = () => {
                       variant="outlined"
                       startIcon={<Edit />}
                       fullWidth
+                      onClick={handleEditRequest}
                     >
                       Edit Request
                     </Button>
@@ -383,6 +480,7 @@ const RequestDetail = () => {
                       color="error"
                       startIcon={<Delete />}
                       fullWidth
+                      onClick={handleDeleteRequest}
                     >
                       Delete Request
                     </Button>
@@ -440,6 +538,22 @@ const RequestDetail = () => {
             disabled={!notes.trim()}
           >
             Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)}>
+        <DialogTitle>Delete Request</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this request? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialog(false)}>Cancel</Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

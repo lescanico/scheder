@@ -17,7 +17,11 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Tooltip
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import {
   Add,
@@ -39,6 +43,8 @@ const ProviderPortal = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [requestToDelete, setRequestToDelete] = useState(null);
 
   const loadRequests = useCallback(async () => {
     try {
@@ -56,6 +62,30 @@ const ProviderPortal = () => {
   useEffect(() => {
     loadRequests();
   }, [loadRequests]);
+
+  const handleEditRequest = (request) => {
+    // Navigate to edit form (you can implement a separate edit form or reuse the request form)
+    navigate(`/request/${request.id}/edit`);
+  };
+
+  const handleDeleteRequest = (request) => {
+    setRequestToDelete(request);
+    setDeleteDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!requestToDelete) return;
+
+    try {
+      await requestService.deleteRequest(requestToDelete.id);
+      setDeleteDialog(false);
+      setRequestToDelete(null);
+      loadRequests(); // Reload the list
+    } catch (error) {
+      setError('Failed to delete request');
+      console.error('Delete request error:', error);
+    }
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -220,12 +250,19 @@ const ProviderPortal = () => {
                       {request.status === 'pending' && (
                         <>
                           <Tooltip title="Edit Request">
-                            <IconButton size="small">
+                            <IconButton 
+                              size="small"
+                              onClick={() => handleEditRequest(request)}
+                            >
                               <Edit />
                             </IconButton>
                           </Tooltip>
                           <Tooltip title="Delete Request">
-                            <IconButton size="small" color="error">
+                            <IconButton 
+                              size="small" 
+                              color="error"
+                              onClick={() => handleDeleteRequest(request)}
+                            >
                               <Delete />
                             </IconButton>
                           </Tooltip>
@@ -281,6 +318,22 @@ const ProviderPortal = () => {
           ))}
         </Grid>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialog} onClose={() => setDeleteDialog(false)}>
+        <DialogTitle>Delete Request</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this request? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialog(false)}>Cancel</Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
