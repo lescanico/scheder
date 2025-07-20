@@ -103,20 +103,11 @@ const Login = () => {
               width: '100%',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-              <img 
-                src="/penn-psych.png" 
-                alt="Penn Psychiatry" 
-                style={{ height: 48, width: 'auto' }}
-              />
-              <Box>
-                <Typography component="h1" variant="h4" gutterBottom>
-                  Penn Psychiatry
-                </Typography>
-                <Typography component="h2" variant="h6" color="text.secondary">
-                  Schedule Management System
-                </Typography>
-              </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
+              <img src="/favicon.png" alt="Scheder Logo" style={{ height: 64, marginBottom: 16 }} />
+              <Typography variant="h5" gutterBottom>
+                Penn Psychiatry
+              </Typography>
             </Box>
             
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
