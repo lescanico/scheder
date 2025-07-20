@@ -22,11 +22,15 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       authService.getCurrentUser()
         .then(userData => {
+          console.log('User data loaded:', userData);
           setUser(userData);
           setIsAuthenticated(true);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('Error loading user data:', error);
           localStorage.removeItem('token');
+          setUser(null);
+          setIsAuthenticated(false);
         })
         .finally(() => {
           setLoading(false);
@@ -41,12 +45,15 @@ export const AuthProvider = ({ children }) => {
       const response = await authService.login(email, password);
       const { user: userData, token } = response.data;
       
+      console.log('Login successful, user data:', userData);
+      
       localStorage.setItem('token', token);
       setUser(userData);
       setIsAuthenticated(true);
       
       return { success: true };
     } catch (error) {
+      console.error('Login error:', error);
       return { 
         success: false, 
         error: error.response?.data?.error || 'Login failed' 

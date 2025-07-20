@@ -31,8 +31,9 @@ const Dashboard = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    console.log('Dashboard - User data:', user);
     loadDashboardData();
-  }, []);
+  }, [user]);
 
   const loadDashboardData = async () => {
     try {
@@ -93,7 +94,7 @@ const Dashboard = () => {
     <Box>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Welcome, {user?.name}!
+          Welcome, {user?.name || 'User'}!
         </Typography>
         <Typography variant="body1" color="text.secondary">
           {user?.role === 'provider' && 'Manage your schedule blocking requests'}
