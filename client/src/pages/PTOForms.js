@@ -21,11 +21,8 @@ import {
   LocalHospital,
   Info
 } from '@mui/icons-material';
-import { useAuth } from '../contexts/AuthContext';
 
 const PTOForms = () => {
-  const { user } = useAuth();
-
   const handleDownload = (filename, displayName) => {
     const link = document.createElement('a');
     link.href = `/${filename}`;

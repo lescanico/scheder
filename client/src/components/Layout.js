@@ -19,7 +19,6 @@ import {
   Menu as MenuIcon,
   Dashboard,
   Schedule,
-  People,
   Assessment,
   AccountCircle,
   Notifications,
