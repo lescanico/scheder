@@ -23,7 +23,8 @@ import {
   Assessment,
   AccountCircle,
   Notifications,
-  Group
+  Group,
+  Description
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -51,6 +52,13 @@ const Layout = ({ children }) => {
       { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
       { text: 'Schedule Requests', icon: <Schedule />, path: '/requests' },
     ];
+
+    // Add PTO Forms menu for provider role
+    if (user?.role === 'provider') {
+      baseItems.push(
+        { text: 'PTO Forms', icon: <Description />, path: '/pto-forms' }
+      );
+    }
 
     // Add Users menu for admin and director roles
     if (user?.role === 'admin' || user?.role === 'director') {

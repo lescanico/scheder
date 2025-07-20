@@ -15,6 +15,7 @@ import DirectorDashboard from './pages/DirectorDashboard';
 import RequestForm from './pages/RequestForm';
 import RequestDetail from './pages/RequestDetail';
 import UserManagement from './pages/UserManagement';
+import PTOForms from './pages/PTOForms';
 import Layout from './components/Layout';
 
 const theme = createTheme({
@@ -93,6 +94,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute>
               <RequestDetail />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/pto-forms" 
+          element={
+            <ProtectedRoute allowedRoles={['provider']}>
+              <PTOForms />
             </ProtectedRoute>
           } 
         />
