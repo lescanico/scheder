@@ -7,12 +7,14 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ProviderPortal from './pages/ProviderPortal';
 import AdminDashboard from './pages/AdminDashboard';
 import DirectorDashboard from './pages/DirectorDashboard';
 import RequestForm from './pages/RequestForm';
 import RequestDetail from './pages/RequestDetail';
+import UserManagement from './pages/UserManagement';
 import Layout from './components/Layout';
 
 const theme = createTheme({
@@ -56,6 +58,7 @@ const AppContent = () => {
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Box>
@@ -103,6 +106,14 @@ const AppContent = () => {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/users" 
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'director']}>
+              <UserManagement />
+            </ProtectedRoute>
+          } 
+        />
         
         {/* Director Routes */}
         <Route 
@@ -120,12 +131,12 @@ const AppContent = () => {
   );
 };
 
-// Root App Component
+// App Component
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <CssBaseline />
         <AuthProvider>
           <Router>
             <AppContent />

@@ -1,40 +1,4 @@
-import axios from 'axios';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://scheder-backend.fly.dev/api';
-
-// Create axios instance with default config
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add token to requests if available
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Handle token expiration
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
-);
+import { api } from './requestService';
 
 export const authService = {
   // Login user
@@ -59,6 +23,30 @@ export const authService = {
   async getCurrentUser() {
     const response = await api.get('/auth/me');
     return response.data.data;
+  },
+
+  // Get all users (admin only)
+  async getUsers() {
+    const response = await api.get('/auth/users');
+    return response;
+  },
+
+  // Create new user (admin only)
+  async createUser(userData) {
+    const response = await api.post('/auth/users', userData);
+    return response;
+  },
+
+  // Update user (admin only)
+  async updateUser(userId, userData) {
+    const response = await api.put(`/auth/users/${userId}`, userData);
+    return response;
+  },
+
+  // Delete user (admin only)
+  async deleteUser(userId) {
+    const response = await api.delete(`/auth/users/${userId}`);
+    return response;
   },
 
   // Check if user is authenticated

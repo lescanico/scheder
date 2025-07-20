@@ -161,6 +161,16 @@ const Login = () => {
               >
                 {loading ? 'Signing In...' : 'Sign In'}
               </Button>
+              
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => navigate('/register')}
+                disabled={loading}
+                sx={{ mb: 2 }}
+              >
+                Don't have an account? Register
+              </Button>
             </Box>
 
             <Box sx={{ mt: 3, width: '100%' }}>

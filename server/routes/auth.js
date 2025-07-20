@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const router = express.Router();
 
 // Mock user data (replace with database in production)
-const users = [
+let users = [
   {
     id: 'user_1',
     email: 'provider@clinic.com',
@@ -30,6 +30,35 @@ const users = [
     role: 'director'
   }
 ];
+
+// Middleware to check if user is admin or director
+const requireAdmin = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ 
+      success: false, 
+      error: 'No token provided' 
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    if (decoded.role !== 'admin' && decoded.role !== 'director') {
+      return res.status(403).json({ 
+        success: false, 
+        error: 'Access denied. Admin or Director role required.' 
+      });
+    }
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ 
+      success: false, 
+      error: 'Invalid token' 
+    });
+  }
+};
 
 // Validation middleware
 const validateLogin = [
@@ -103,8 +132,6 @@ router.post('/login', validateLogin, async (req, res) => {
 
 // Logout endpoint
 router.post('/logout', (req, res) => {
-  // In a real application, you might want to blacklist the token
-  // For now, we'll just return a success response
   res.json({
     success: true,
     message: 'Logout successful'
@@ -218,6 +245,181 @@ router.post('/register', [
     res.status(500).json({ 
       success: false, 
       error: 'Registration failed' 
+    });
+  }
+});
+
+// Get all users (admin only)
+router.get('/users', requireAdmin, (req, res) => {
+  try {
+    const usersWithoutPasswords = users.map(user => {
+      const { password: _, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    });
+
+    res.json({
+      success: true,
+      data: usersWithoutPasswords
+    });
+  } catch (error) {
+    console.error('Get users error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to get users' 
+    });
+  }
+});
+
+// Create new user (admin only)
+router.post('/users', requireAdmin, [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('name').notEmpty().withMessage('Name is required'),
+  body('role').isIn(['provider', 'admin', 'director']).withMessage('Valid role is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        success: false, 
+        errors: errors.array() 
+      });
+    }
+
+    const { email, password, name, role, providerId } = req.body;
+
+    // Check if user already exists
+    const existingUser = users.find(u => u.email === email);
+    if (existingUser) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'User already exists' 
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = {
+      id: `user_${users.length + 1}`,
+      email,
+      password: hashedPassword,
+      name,
+      role,
+      providerId
+    };
+
+    users.push(newUser);
+
+    const { password: _, ...userWithoutPassword } = newUser;
+
+    res.status(201).json({
+      success: true,
+      message: 'User created successfully',
+      data: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Create user error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to create user' 
+    });
+  }
+});
+
+// Update user (admin only)
+router.put('/users/:id', requireAdmin, [
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('name').notEmpty().withMessage('Name is required'),
+  body('role').isIn(['provider', 'admin', 'director']).withMessage('Valid role is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        success: false, 
+        errors: errors.array() 
+      });
+    }
+
+    const { id } = req.params;
+    const { email, name, role, providerId, password } = req.body;
+
+    const userIndex = users.findIndex(u => u.id === id);
+    if (userIndex === -1) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'User not found' 
+      });
+    }
+
+    // Check if email is already taken by another user
+    const existingUser = users.find(u => u.email === email && u.id !== id);
+    if (existingUser) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Email already in use' 
+      });
+    }
+
+    // Update user
+    const updatedUser = {
+      ...users[userIndex],
+      email,
+      name,
+      role,
+      providerId
+    };
+
+    // Update password if provided
+    if (password && password.length >= 6) {
+      updatedUser.password = await bcrypt.hash(password, 10);
+    }
+
+    users[userIndex] = updatedUser;
+
+    const { password: _, ...userWithoutPassword } = updatedUser;
+
+    res.json({
+      success: true,
+      message: 'User updated successfully',
+      data: userWithoutPassword
+    });
+  } catch (error) {
+    console.error('Update user error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to update user' 
+    });
+  }
+});
+
+// Delete user (admin only)
+router.delete('/users/:id', requireAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userIndex = users.findIndex(u => u.id === id);
+    if (userIndex === -1) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'User not found' 
+      });
+    }
+
+    // Remove user
+    users.splice(userIndex, 1);
+
+    res.json({
+      success: true,
+      message: 'User deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to delete user' 
     });
   }
 });

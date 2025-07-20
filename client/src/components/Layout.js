@@ -22,7 +22,8 @@ import {
   People,
   Assessment,
   AccountCircle,
-  Notifications
+  Notifications,
+  Group
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -32,7 +33,7 @@ const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,12 +46,27 @@ const Layout = ({ children }) => {
     navigate('/login');
   };
 
-  const menuItems = [
-    { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-    { text: 'Schedule Requests', icon: <Schedule />, path: '/requests' },
-    { text: 'Users', icon: <People />, path: '/users' },
-    { text: 'Reports', icon: <Assessment />, path: '/reports' },
-  ];
+  const getMenuItems = () => {
+    const baseItems = [
+      { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
+      { text: 'Schedule Requests', icon: <Schedule />, path: '/requests' },
+    ];
+
+    // Add Users menu for admin and director roles
+    if (user?.role === 'admin' || user?.role === 'director') {
+      baseItems.push(
+        { text: 'Users', icon: <Group />, path: '/users' }
+      );
+    }
+
+    baseItems.push(
+      { text: 'Reports', icon: <Assessment />, path: '/reports' }
+    );
+
+    return baseItems;
+  };
+
+  const menuItems = getMenuItems();
 
   const drawer = (
     <Box sx={{ width: 250 }}>
