@@ -12,7 +12,6 @@ import {
   ListItemText,
   useTheme,
   useMediaQuery,
-  Avatar,
   Divider,
   Button
 } from '@mui/material';
@@ -33,7 +32,7 @@ const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
