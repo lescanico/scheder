@@ -50,7 +50,13 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('AuthContext - Attempting login...');
       const response = await authService.login(email, password);
-      const { user: userData, token } = response.data;
+      console.log('AuthContext - Full login response:', response);
+      console.log('AuthContext - Response data:', response.data);
+      
+      // Fix: Extract from nested data structure
+      const { user: userData, token } = response.data.data;
+      console.log('AuthContext - Extracted user data:', userData);
+      console.log('AuthContext - Extracted token:', token);
       
       console.log('AuthContext - Login successful, user data:', userData);
       
@@ -83,7 +89,8 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
-      const { user: newUser, token } = response.data;
+      // Fix: Extract from nested data structure
+      const { user: newUser, token } = response.data.data;
       
       localStorage.setItem('token', token);
       setUser(newUser);

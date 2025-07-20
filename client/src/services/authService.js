@@ -22,7 +22,7 @@ export const authService = {
   // Get current user
   async getCurrentUser() {
     const response = await api.get('/auth/me');
-    return response.data.data;
+    return response.data.data; // Return the nested data field
   },
 
   // Get all users (admin only)
