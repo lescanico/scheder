@@ -62,6 +62,12 @@ export const requestService = {
     return response.data;
   },
 
+  // Update existing request
+  async updateRequest(id, requestData) {
+    const response = await api.put(`/requests/${id}`, requestData);
+    return response.data;
+  },
+
   // Update request status
   async updateRequestStatus(id, status, notes = '', updatedBy = '') {
     const response = await api.patch(`/requests/${id}/status`, {

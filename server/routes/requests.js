@@ -9,8 +9,39 @@ const emailService = require('../services/emailService');
 const router = express.Router();
 
 // In-memory storage for demo (replace with database in production)
-let requests = [];
-let nextId = 1;
+let requests = [
+  {
+    id: 'req_1',
+    providerId: 'prov_1',
+    providerName: 'Dr. John Provider',
+    providerEmail: 'provider@clinic.com',
+    requestType: 'full_day',
+    startDate: '2024-01-15',
+    reason: 'Personal day off',
+    ptoRequired: true,
+    status: 'pending',
+    createdAt: '2024-01-10T10:00:00.000Z',
+    updatedAt: '2024-01-10T10:00:00.000Z'
+  },
+  {
+    id: 'req_2',
+    providerId: 'prov_1',
+    providerName: 'Dr. John Provider',
+    providerEmail: 'provider@clinic.com',
+    requestType: 'specific_time',
+    startDate: '2024-01-20',
+    startTime: '14:00',
+    endTime: '16:00',
+    reason: 'Medical appointment',
+    ptoRequired: false,
+    status: 'approved',
+    approvedAt: '2024-01-11T09:00:00.000Z',
+    approvedBy: 'Admin Staff',
+    createdAt: '2024-01-09T14:30:00.000Z',
+    updatedAt: '2024-01-11T09:00:00.000Z'
+  }
+];
+let nextId = 3;
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -165,6 +196,64 @@ router.post('/', validateRequest, async (req, res) => {
   } catch (error) {
     console.error('Error creating request:', error);
     res.status(500).json({ success: false, error: 'Failed to create request' });
+  }
+});
+
+// Update request
+router.put('/:id', validateRequest, async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        success: false, 
+        errors: errors.array() 
+      });
+    }
+
+    const requestIndex = requests.findIndex(req => req.id === req.params.id);
+    if (requestIndex === -1) {
+      return res.status(404).json({ success: false, error: 'Request not found' });
+    }
+
+    const request = requests[requestIndex];
+    
+    // Only allow editing pending requests
+    if (request.status !== 'pending') {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Only pending requests can be edited' 
+      });
+    }
+
+    // Update request data
+    const updatedData = {
+      ...req.body,
+      id: request.id,
+      status: request.status, // Keep original status
+      createdAt: request.createdAt, // Keep original creation date
+      updatedAt: new Date().toISOString()
+    };
+
+    const updatedRequest = new Request(updatedData);
+    const validation = updatedRequest.validate();
+    
+    if (!validation.isValid) {
+      return res.status(400).json({
+        success: false,
+        errors: validation.errors
+      });
+    }
+
+    requests[requestIndex] = updatedRequest;
+
+    res.json({
+      success: true,
+      data: updatedRequest,
+      message: 'Request updated successfully'
+    });
+  } catch (error) {
+    console.error('Error updating request:', error);
+    res.status(500).json({ success: false, error: 'Failed to update request' });
   }
 });
 

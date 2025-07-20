@@ -90,6 +90,14 @@ const AppContent = () => {
           } 
         />
         <Route 
+          path="/request/:id/edit" 
+          element={
+            <ProtectedRoute allowedRoles={['provider']}>
+              <RequestForm />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
           path="/request/:id" 
           element={
             <ProtectedRoute>

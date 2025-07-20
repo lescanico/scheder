@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -24,17 +24,19 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Upload } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { requestService } from '../services/requestService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const steps = ['Request Details', 'Date & Time', 'Review & Submit'];
 
 const RequestForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { id } = useParams(); // Get request ID if editing
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
   const [formData, setFormData] = useState({
     requestType: '',
@@ -49,6 +51,41 @@ const RequestForm = () => {
     recurringDays: [],
     recurringMonths: []
   });
+
+  // Load existing request data if editing
+  useEffect(() => {
+    if (id) {
+      setIsEditing(true);
+      loadRequestData();
+    }
+  }, [id]);
+
+  const loadRequestData = async () => {
+    try {
+      setLoading(true);
+      const response = await requestService.getRequest(id);
+      const request = response.data;
+      
+      setFormData({
+        requestType: request.requestType,
+        startDate: request.startDate ? new Date(request.startDate) : null,
+        endDate: request.endDate ? new Date(request.endDate) : null,
+        startTime: request.startTime ? new Date(`2000-01-01T${request.startTime}`) : null,
+        endTime: request.endTime ? new Date(`2000-01-01T${request.endTime}`) : null,
+        reason: request.reason,
+        ptoRequired: request.ptoRequired || false,
+        ptoFile: null, // Don't load existing file
+        recurringPattern: request.recurringPattern || '',
+        recurringDays: request.recurringDays || [],
+        recurringMonths: request.recurringMonths || []
+      });
+    } catch (error) {
+      setError('Failed to load request data');
+      console.error('Load request error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const requestTypes = [
     { value: 'specific_time', label: 'Specific Time Period' },
@@ -101,15 +138,20 @@ const RequestForm = () => {
         endTime: formData.endTime?.toTimeString().slice(0, 5)
       };
 
-      const response = await requestService.createRequest(requestData);
+      let response;
+      if (isEditing) {
+        response = await requestService.updateRequest(id, requestData);
+      } else {
+        response = await requestService.createRequest(requestData);
+      }
       
       if (response.success) {
-        setSuccess('Request submitted successfully!');
+        setSuccess(isEditing ? 'Request updated successfully!' : 'Request submitted successfully!');
         setTimeout(() => {
           navigate('/provider');
         }, 2000);
       } else {
-        setError(response.error || 'Failed to submit request');
+        setError(response.error || (isEditing ? 'Failed to update request' : 'Failed to submit request'));
       }
     } catch (error) {
       setError('An unexpected error occurred');
