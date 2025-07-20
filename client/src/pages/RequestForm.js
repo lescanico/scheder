@@ -56,36 +56,34 @@ const RequestForm = () => {
   useEffect(() => {
     if (id) {
       setIsEditing(true);
+      const loadRequestData = async () => {
+        try {
+          setLoading(true);
+          const response = await requestService.getRequest(id);
+          const request = response.data;
+          setFormData({
+            requestType: request.requestType,
+            startDate: request.startDate ? new Date(request.startDate) : null,
+            endDate: request.endDate ? new Date(request.endDate) : null,
+            startTime: request.startTime ? new Date(`2000-01-01T${request.startTime}`) : null,
+            endTime: request.endTime ? new Date(`2000-01-01T${request.endTime}`) : null,
+            reason: request.reason,
+            ptoRequired: request.ptoRequired || false,
+            ptoFile: null, // Don't load existing file
+            recurringPattern: request.recurringPattern || '',
+            recurringDays: request.recurringDays || [],
+            recurringMonths: request.recurringMonths || []
+          });
+        } catch (error) {
+          setError('Failed to load request data');
+          console.error('Load request error:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
       loadRequestData();
     }
   }, [id]);
-
-  const loadRequestData = async () => {
-    try {
-      setLoading(true);
-      const response = await requestService.getRequest(id);
-      const request = response.data;
-      
-      setFormData({
-        requestType: request.requestType,
-        startDate: request.startDate ? new Date(request.startDate) : null,
-        endDate: request.endDate ? new Date(request.endDate) : null,
-        startTime: request.startTime ? new Date(`2000-01-01T${request.startTime}`) : null,
-        endTime: request.endTime ? new Date(`2000-01-01T${request.endTime}`) : null,
-        reason: request.reason,
-        ptoRequired: request.ptoRequired || false,
-        ptoFile: null, // Don't load existing file
-        recurringPattern: request.recurringPattern || '',
-        recurringDays: request.recurringDays || [],
-        recurringMonths: request.recurringMonths || []
-      });
-    } catch (error) {
-      setError('Failed to load request data');
-      console.error('Load request error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const requestTypes = [
     { value: 'specific_time', label: 'Specific Time Period' },
