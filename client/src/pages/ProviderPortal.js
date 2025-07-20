@@ -61,7 +61,7 @@ const ProviderPortal = () => {
     } finally {
       setLoading(false);
     }
-  }, [user.providerId]);
+  }, [user]);
 
   useEffect(() => {
     loadRequests();

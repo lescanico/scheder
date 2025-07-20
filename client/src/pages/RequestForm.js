@@ -21,7 +21,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
-import { Upload, Description } from '@mui/icons-material';
+import { Upload } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { requestService } from '../services/requestService';
 import { useNavigate } from 'react-router-dom';
