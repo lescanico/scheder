@@ -23,8 +23,6 @@ import {
 } from '@mui/material';
 import {
   Assessment,
-  TrendingUp,
-  TrendingDown,
   Schedule,
   CheckCircle,
   Cancel,
@@ -34,7 +32,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { requestService } from '../services/requestService';
 
 const Reports = () => {
-  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [stats, setStats] = useState(null);
