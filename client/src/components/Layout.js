@@ -46,10 +46,28 @@ const Layout = ({ children }) => {
     navigate('/login');
   };
 
+  const handleScheduleRequestsClick = () => {
+    // Route to appropriate dashboard based on user role
+    if (user?.role === 'provider') {
+      navigate('/provider');
+    } else if (user?.role === 'admin') {
+      navigate('/admin');
+    } else if (user?.role === 'director') {
+      navigate('/director');
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
   const getMenuItems = () => {
     const baseItems = [
       { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
-      { text: 'Schedule Requests', icon: <Schedule />, path: '/requests' },
+      { 
+        text: 'Schedule Requests', 
+        icon: <Schedule />, 
+        path: user?.role === 'provider' ? '/provider' : user?.role === 'admin' ? '/admin' : user?.role === 'director' ? '/director' : '/dashboard',
+        onClick: handleScheduleRequestsClick
+      },
     ];
 
     // Add PTO Forms menu for provider role
@@ -94,7 +112,11 @@ const Layout = ({ children }) => {
             button
             key={item.text}
             onClick={() => {
-              navigate(item.path);
+              if (item.onClick) {
+                item.onClick();
+              } else {
+                navigate(item.path);
+              }
               if (isMobile) setMobileOpen(false);
             }}
             selected={location.pathname === item.path}
