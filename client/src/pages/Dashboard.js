@@ -31,7 +31,6 @@ const Dashboard = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    console.log('Dashboard - User data:', user);
     loadDashboardData();
   }, [user]);
 

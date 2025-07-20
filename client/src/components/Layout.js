@@ -38,11 +38,6 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Debug user data
-  console.log('Layout - User data:', user);
-  console.log('Layout - User role:', user?.role);
-  console.log('Layout - Loading:', loading);
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -53,21 +48,15 @@ const Layout = ({ children }) => {
   };
 
   const handleScheduleRequestsClick = () => {
-    console.log('Schedule Requests clicked, user role:', user?.role);
-    console.log('Full user object:', user);
     
     // Route to appropriate dashboard based on user role
     if (user?.role === 'provider') {
-      console.log('Navigating to provider dashboard');
       navigate('/provider');
     } else if (user?.role === 'admin') {
-      console.log('Navigating to admin dashboard');
       navigate('/admin');
     } else if (user?.role === 'director') {
-      console.log('Navigating to director dashboard');
       navigate('/director');
     } else {
-      console.log('No specific role found or user not loaded, navigating to dashboard');
       navigate('/dashboard');
     }
   };
@@ -143,7 +132,6 @@ const Layout = ({ children }) => {
               button
               key={item.text}
               onClick={() => {
-                console.log('Menu item clicked:', item.text, 'Path:', item.path);
                 if (item.onClick) {
                   item.onClick();
                 } else {

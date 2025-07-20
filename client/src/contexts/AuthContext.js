@@ -19,13 +19,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check if user is already logged in
     const token = localStorage.getItem('token');
-    console.log('AuthContext - Token exists:', !!token);
     
     if (token) {
-      console.log('AuthContext - Attempting to load user data...');
       authService.getCurrentUser()
         .then(userData => {
-          console.log('AuthContext - User data loaded successfully:', userData);
           setUser(userData);
           setIsAuthenticated(true);
         })
@@ -37,28 +34,19 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(false);
         })
         .finally(() => {
-          console.log('AuthContext - Setting loading to false');
           setLoading(false);
         });
     } else {
-      console.log('AuthContext - No token found, setting loading to false');
       setLoading(false);
     }
   }, []);
 
   const login = async (email, password) => {
     try {
-      console.log('AuthContext - Attempting login...');
       const response = await authService.login(email, password);
-      console.log('AuthContext - Full login response:', response);
-      console.log('AuthContext - Response data:', response.data);
       
       // Fix: Extract from nested data structure
       const { user: userData, token } = response.data.data;
-      console.log('AuthContext - Extracted user data:', userData);
-      console.log('AuthContext - Extracted token:', token);
-      
-      console.log('AuthContext - Login successful, user data:', userData);
       
       localStorage.setItem('token', token);
       setUser(userData);
@@ -113,8 +101,6 @@ export const AuthProvider = ({ children }) => {
     logout,
     register
   };
-
-  console.log('AuthContext - Current state:', { user, isAuthenticated, loading });
 
   if (loading) {
     return <div>Loading...</div>;
