@@ -78,7 +78,7 @@ const Layout = ({ children }) => {
       { 
         text: 'Schedule Requests', 
         icon: <Schedule />, 
-        path: '/dashboard', // Default to dashboard
+        path: user?.role === 'provider' ? '/provider' : user?.role === 'admin' ? '/admin' : user?.role === 'director' ? '/director' : '/dashboard',
         onClick: handleScheduleRequestsClick
       },
     ];
@@ -129,25 +129,65 @@ const Layout = ({ children }) => {
       </Box>
       <Divider />
       <List>
-        {menuItems.map((item) => (
-          <ListItem
-            button
-            key={item.text}
-            onClick={() => {
-              console.log('Menu item clicked:', item.text, 'Path:', item.path);
-              if (item.onClick) {
-                item.onClick();
-              } else {
-                navigate(item.path);
-              }
-              if (isMobile) setMobileOpen(false);
-            }}
-            selected={location.pathname === item.path}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
+        {menuItems.map((item) => {
+          // Determine if item is selected based on current path
+          const isSelected = location.pathname === item.path || 
+                           (item.text === 'Schedule Requests' && 
+                            (location.pathname === '/provider' || location.pathname === '/admin' || location.pathname === '/director'));
+          
+          return (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => {
+                console.log('Menu item clicked:', item.text, 'Path:', item.path);
+                if (item.onClick) {
+                  item.onClick();
+                } else {
+                  navigate(item.path);
+                }
+                if (isMobile) setMobileOpen(false);
+              }}
+              selected={isSelected}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(153, 0, 0, 0.08)', // Penn Red with opacity
+                },
+                '&.Mui-selected': {
+                  backgroundColor: 'rgba(153, 0, 0, 0.12)', // Penn Red with more opacity
+                  '&:hover': {
+                    backgroundColor: 'rgba(153, 0, 0, 0.16)', // Penn Red with even more opacity
+                  },
+                },
+                '&.Mui-selected .MuiListItemIcon-root': {
+                  color: '#990000', // Penn Red
+                },
+                '&.Mui-selected .MuiListItemText-primary': {
+                  color: '#990000', // Penn Red
+                  fontWeight: 600,
+                },
+                transition: 'all 0.2s ease-in-out',
+              }}
+            >
+              <ListItemIcon 
+                sx={{ 
+                  color: isSelected ? '#990000' : 'inherit',
+                  transition: 'color 0.2s ease-in-out',
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={item.text} 
+                sx={{ 
+                  color: isSelected ? '#990000' : 'inherit',
+                  fontWeight: isSelected ? 600 : 400,
+                  transition: 'all 0.2s ease-in-out',
+                }}
+              />
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );
