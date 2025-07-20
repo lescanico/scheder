@@ -37,8 +37,8 @@ import {
   Schedule,
   FilterList,
   Refresh,
-  Approve,
-  Reject
+  ThumbUp,
+  ThumbDown
 } from '@mui/icons-material';
 import { requestService } from '../services/requestService';
 import { useNavigate } from 'react-router-dom';
@@ -395,7 +395,7 @@ const DirectorDashboard = () => {
                                   color="success"
                                   onClick={() => handleApproval(request, 'approve')}
                                 >
-                                  <Approve />
+                                  <ThumbUp />
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="Reject">
@@ -404,7 +404,7 @@ const DirectorDashboard = () => {
                                   color="error"
                                   onClick={() => handleApproval(request, 'reject')}
                                 >
-                                  <Reject />
+                                  <ThumbDown />
                                 </IconButton>
                               </Tooltip>
                             </>
