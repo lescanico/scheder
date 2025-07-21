@@ -70,7 +70,7 @@ const Login = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
               <img src="/favicon.png" alt="Scheder Logo" style={{ height: 64, marginBottom: 16 }} />
               <Typography variant="h5" gutterBottom>
-                Penn Psychiatry
+                OPC Schedule Request Management
               </Typography>
             </Box>
             

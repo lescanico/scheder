@@ -31,7 +31,7 @@ const Footer = () => {
         align="center"
         sx={{ fontSize: '0.75rem', mt: 0.5 }}
       >
-        Developed for operational workflow optimization at the University of Pennsylvania Department of Psychiatry
+        Developed for operational workflow optimization at OPC
       </Typography>
     </Box>
   );

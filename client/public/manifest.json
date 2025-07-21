@@ -1,7 +1,7 @@
 {
-  "short_name": "Penn Psychiatry",
-  "name": "Penn Psychiatry - Schedule Management",
-  "description": "Schedule Management System for Penn Psychiatry Clinic",
+  "short_name": "OPC Schedule Request",
+  "name": "OPC Schedule Request Management",
+  "description": "Schedule Request Management System for OPC Clinic",
   "icons": [
     {
       "src": "favicon.png",
