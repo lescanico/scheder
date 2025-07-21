@@ -28,7 +28,7 @@ const PTOForms = () => {
       filename: 'Time off request form MD OPC 2024.pdf',
       displayName: 'Time Off Request Form - MD OPC 2024.pdf',
       title: 'MD Time Off Request Form',
-      description: 'Official Penn Psychiatry time off request form for Medical Doctors',
+      description: 'Official OPC time off request form for Medical Doctors',
       icon: <Person />,
       role: 'provider'
     },
@@ -36,7 +36,7 @@ const PTOForms = () => {
       filename: 'Time off request form NP OPC 2024.pdf',
       displayName: 'Time Off Request Form - NP OPC 2024.pdf',
       title: 'NP Time Off Request Form',
-      description: 'Official Penn Psychiatry time off request form for Nurse Practitioners',
+      description: 'Official OPC time off request form for Nurse Practitioners',
       icon: <LocalHospital />,
       role: 'provider'
     }
@@ -49,7 +49,7 @@ const PTOForms = () => {
           PTO Request Forms
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Download official Penn Psychiatry time off request forms for your schedule blocking requests.
+          Download official OPC time off request forms for your schedule blocking requests.
         </Typography>
       </Box>
 

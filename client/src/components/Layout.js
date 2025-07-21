@@ -116,7 +116,7 @@ const Layout = ({ children }) => {
           style={{ height: 40, width: 'auto' }}
         />
         <Typography variant="h6" noWrap component="div">
-          Penn Psychiatry
+          OPC Schedule Management System 
         </Typography>
       </Box>
       <Divider />

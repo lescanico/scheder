@@ -103,7 +103,7 @@ const Register = () => {
               />
               <Box>
                 <Typography component="h1" variant="h4" gutterBottom>
-                  Penn Psychiatry
+                  OPC Schedule Management System
                 </Typography>
                 <Typography component="h2" variant="h6" color="text.secondary">
                   User Registration
