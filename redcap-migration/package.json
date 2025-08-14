@@ -1,0 +1,39 @@
+{
+  "name": "scheder-redcap-migration",
+  "version": "1.0.0",
+  "description": "Migration tools for transitioning Scheder schedule management system to REDCap",
+  "main": "api-integration.js",
+  "scripts": {
+    "migrate": "node data-migration-script.js",
+    "validate": "node data-migration-script.js --dry-run",
+    "test": "node test-api-integration.js",
+    "help": "node data-migration-script.js --help"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "redcap",
+    "migration",
+    "schedule-management",
+    "healthcare",
+    "data-migration"
+  ],
+  "author": "Nicolas Lescano, MD - University of Pennsylvania",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lescanico/scheder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lescanico/scheder/issues"
+  },
+  "homepage": "https://github.com/lescanico/scheder#readme"
+}
