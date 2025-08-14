@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<redcap version="14.0.0">
+    <project>
+        <project_title>Scheder - Schedule Blocking Management System</project_title>
+        <project_language>English</project_language>
+        <purpose>4</purpose>
+        <purpose_other>Clinical workflow management for outpatient psychiatry schedule blocking requests</purpose_other>
+        <project_notes>
+            <![CDATA[
+            This REDCap project manages schedule blocking requests for outpatient psychiatry clinics.
+            
+            Key Features:
+            - Provider schedule blocking requests
+            - Multi-level approval workflow (Admin → Director)
+            - PTO form document management
+            - Conflict detection and resolution
+            - Automated notifications and alerts
+            
+            Migrated from custom Node.js/React application to REDCap for enhanced data management and compliance.
+            
+            Author: Nicolas Lescano, MD - University of Pennsylvania Department of Psychiatry
+            ]]>
+        </project_notes>
+        <custom_record_label>[provider_name] - [start_date] ([request_type])</custom_record_label>
+        <secondary_unique_field>provider_email</secondary_unique_field>
+        <is_longitudinal>0</is_longitudinal>
+        <has_repeating_instruments_or_events>0</has_repeating_instruments_or_events>
+        <surveys_enabled>1</surveys_enabled>
+        <scheduling_enabled>0</scheduling_enabled>
+        <record_autonumbering_enabled>1</record_autonumbering_enabled>
+        <randomization_enabled>0</randomization_enabled>
+        <ddp_enabled>0</ddp_enabled>
+        <project_language>English</project_language>
+        <project_encoding>UTF-8</project_encoding>
+        <is_child_of></is_child_of>
+        <data_resolution_enabled>2</data_resolution_enabled>
+        <field_comment_edit_delete>1</field_comment_edit_delete>
+        <realtime_webservice_enabled>0</realtime_webservice_enabled>
+        <realtime_webservice_type>REDCAP_CONNECT</realtime_webservice_type>
+        <project_dashboard_enabled>1</project_dashboard_enabled>
+        <project_dashboard_type>1</project_dashboard_type>
+        <bypass_branching_erase_field_prompt>0</bypass_branching_erase_field_prompt>
+    </project>
+    
+    <events>
+        <event>
+            <unique_event_name>schedule_request_arm_1</unique_event_name>
+            <event_name>Schedule Request</event_name>
+            <arm_num>1</arm_num>
+            <day_offset>0</day_offset>
+            <offset_min>0</offset_min>
+            <offset_max>0</offset_max>
+            <descrip></descrip>
+        </event>
+    </events>
+    
+    <arms>
+        <arm>
+            <arm_num>1</arm_num>
+            <name>Schedule Request Management</name>
+        </arm>
+    </arms>
+    
+    <form_events_mapping>
+        <form>
+            <form_name>schedule_request_form</form_name>
+            <unique_event_name>schedule_request_arm_1</unique_event_name>
+        </form>
+        <form>
+            <form_name>approval_form</form_name>
+            <unique_event_name>schedule_request_arm_1</unique_event_name>
+        </form>
+    </form_events_mapping>
+</redcap>

@@ -1,0 +1,28 @@
+Variable / Field Name,Form Name,Section Header,Field Type,Field Label,Choices/Calculations/OR Slider Labels,Field Note,Text Validation Type OR Show Slider Number,Text Validation Min,Text Validation Max,Identifier?,Branching Logic (Show field only if...),Required Field?,Custom Alignment,Question Number (surveys only),Matrix Group Name,Matrix Ranking?,Field Annotation
+record_id,schedule_request_form,,text,Record ID,,Auto-generated unique identifier,,,,,,,,,,,
+provider_id,schedule_request_form,Provider Information,text,Provider ID,,Enter the unique provider identifier,,,,,Y,,,,,
+provider_name,schedule_request_form,,text,Provider Name,,Full name of the requesting provider,,,,,Y,,,,,
+provider_email,schedule_request_form,,text,Provider Email,,Provider's email address,email,,,Y,,Y,,,,,
+request_type,schedule_request_form,Request Details,radio,Request Type,"1, Specific Time Period | 2, Full Day | 3, Multiple Days | 4, Recurring",Select the type of schedule blocking request,,,,,Y,,,,,
+start_date,schedule_request_form,,text,Start Date,,Date when the blocking should begin,date_mdy,,,,,Y,,,,,
+end_date,schedule_request_form,,text,End Date,,Date when the blocking should end (for multiple days),date_mdy,,,,[request_type] = '3',,,,,,
+start_time,schedule_request_form,,text,Start Time,,Time when blocking begins (24-hour format),time_hh_mm,,,,[request_type] = '1',,,,,,
+end_time,schedule_request_form,,text,End Time,,Time when blocking ends (24-hour format),time_hh_mm,,,,[request_type] = '1',,,,,,
+recurring_pattern,schedule_request_form,,radio,Recurring Pattern,"1, Weekly | 2, Bi-weekly | 3, Monthly | 4, Custom",Select the recurring pattern,[request_type] = '4',,,,[request_type] = '4',,,,,,
+recurring_days,schedule_request_form,,checkbox,Recurring Days,"1, Monday | 2, Tuesday | 3, Wednesday | 4, Thursday | 5, Friday | 6, Saturday | 7, Sunday",Select days for recurring requests,[request_type] = '4',,,,[request_type] = '4',,,,,,
+recurring_months,schedule_request_form,,checkbox,Recurring Months,"1, January | 2, February | 3, March | 4, April | 5, May | 6, June | 7, July | 8, August | 9, September | 10, October | 11, November | 12, December",Select months for recurring requests,[request_type] = '4',,,,[request_type] = '4',,,,,,
+reason,schedule_request_form,,textarea,Reason for Request,,Detailed explanation for the schedule blocking request,,,,,Y,,,,,
+pto_required,schedule_request_form,PTO Information,yesno,PTO Form Required,,Is a PTO form required for this request?,,,,,,,,,,,
+pto_form_upload,schedule_request_form,,file,PTO Form Upload,,Upload the PTO form document,[pto_required] = '1',,,,[pto_required] = '1',,,,,,
+request_status,approval_form,Approval Information,radio,Request Status,"1, Pending | 2, Under Review | 3, Approved | 4, Rejected | 5, Cancelled",Current status of the request,,,,,,,,,,@READONLY
+admin_notes,approval_form,,textarea,Administrator Notes,,Notes from the administrator reviewing the request,,,,,,,,,,,
+director_notes,approval_form,,textarea,Director Notes,,Notes from the director (final approval authority),,,,,,,,,,,
+conflicting_appointments,approval_form,Conflict Resolution,textarea,Conflicting Appointments,,List of appointments that conflict with this request,,,,,,,,,,,
+rescheduled_appointments,approval_form,,textarea,Rescheduled Appointments,,List of appointments that were rescheduled,,,,,,,,,,,
+created_timestamp,schedule_request_form,Timestamps,text,Request Created,,Timestamp when request was submitted,,,,,,,,,,@READONLY
+updated_timestamp,approval_form,,text,Last Updated,,Timestamp of last update,,,,,,,,,,@READONLY
+approved_timestamp,approval_form,,text,Approved Date,,Timestamp when request was approved,,,,,,,,,,@READONLY
+approved_by,approval_form,,text,Approved By,,Name of person who approved the request,,,,,,,,,,@READONLY
+rejected_timestamp,approval_form,,text,Rejected Date,,Timestamp when request was rejected,,,,,,,,,,@READONLY
+rejected_by,approval_form,,text,Rejected By,,Name of person who rejected the request,,,,,,,,,,@READONLY
+rejection_reason,approval_form,,textarea,Rejection Reason,,Reason for rejecting the request,,,,,,,,,,,

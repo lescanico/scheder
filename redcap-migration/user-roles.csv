@@ -1,0 +1,4 @@
+Role Name,Unique Role Name,Data Export Tool,Data Import Tool,Data Comparison Tool,Data Logging,File Repository,Data Quality Create,Data Quality Execute,API Export,API Import,Mobile App,Mobile App Download Data,Record Create,Record Rename,Record Delete,Lock/Unlock Records,Data Access Groups,Reports,Stats & Charts,Manage Survey Participants,Calendar,Data Entry,Form Rights
+Provider,provider_role,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,"schedule_request_form:1,approval_form:2","schedule_request_form:1,approval_form:2"
+Administrator,admin_role,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,1,"schedule_request_form:1,approval_form:1","schedule_request_form:1,approval_form:1"
+Director,director_role,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"schedule_request_form:1,approval_form:1","schedule_request_form:1,approval_form:1"
